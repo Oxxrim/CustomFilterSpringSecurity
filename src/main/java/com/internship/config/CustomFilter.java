@@ -1,7 +1,10 @@
 package com.internship.config;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.internship.domain.User;
+import com.internship.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -10,32 +13,31 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
 
+@Component
 public class CustomFilter extends GenericFilterBean {
-    public static final String HEADER_TOKEN = "token";
-    public static final String HEADER_TOKEN_ROLE = "token-role";
-    public static final String DEFAULT_ROLE = "ROLE_USER";
+
+    @Autowired
+    private UserService service;
+
+    private User user;
+
+    /*@PostConstruct
+    public void init() {
+        user = (User) service.loadUserByUsername("admin");
+    }*/
+
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpReq = (HttpServletRequest) request;
-
-            String token = httpReq.getHeader(HEADER_TOKEN);
-            if(token != null) {
-                String username = token.trim();
-                if(!username.isEmpty()) {
-                    String role = Optional.ofNullable(httpReq.getHeader(HEADER_TOKEN_ROLE)).orElse(DEFAULT_ROLE);
-                    Token auth = new Token(username, Collections.singletonList(new SimpleGrantedAuthority(role)));
-
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+            user = (User) service.loadUserByUsername(httpReq.getHeader("username"));
+            if (user != null && user.getPassword().equals(httpReq.getHeader("password"))){
+                SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(user));
             }
         }
-
-
 
         chain.doFilter(request, response);
     }
