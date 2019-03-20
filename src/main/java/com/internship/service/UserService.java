@@ -15,13 +15,15 @@ import java.util.Collections;
 public class UserService implements UserDetailsService {
 
     private final static ArrayList<User> db = new ArrayList<>(Arrays.asList(
-            new User("admin", "password", Collections.singleton(Role.ADMIN)),
-            new User("user", "password", Collections.singleton(Role.USER))));
+            new User("admin", "password", true, true, true, true, Collections.singleton(Role.ADMIN)),
+            new User("user", "password", true, true, true, true, Collections.singleton(Role.USER))));
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return db.stream().filter(user -> user.getUsername().equals(username))
+        User user = db.stream().filter(usr -> usr.getUsername().equals(username))
                 .findFirst()
                 .get();
+
+        return  user;
     }
 }
