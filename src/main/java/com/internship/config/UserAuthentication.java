@@ -4,16 +4,17 @@ import com.internship.domain.User;
 import lombok.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class UserAuthentication implements Authentication {
 
-    private final User user;
+    private final UserDetails user;
 
     private boolean authenticated = true;
 
-    public UserAuthentication(@NonNull User user) {
+    public UserAuthentication(@NonNull UserDetails user) {
         this.user = user;
     }
 

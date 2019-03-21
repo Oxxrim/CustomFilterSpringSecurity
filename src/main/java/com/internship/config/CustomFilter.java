@@ -4,6 +4,7 @@ import com.internship.domain.User;
 import com.internship.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -20,7 +21,7 @@ public class CustomFilter extends GenericFilterBean {
     @Autowired
     private UserService service;
 
-    private User user;
+    private UserDetails user;
 
     /*@PostConstruct
     public void init() {
@@ -33,7 +34,7 @@ public class CustomFilter extends GenericFilterBean {
 
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpReq = (HttpServletRequest) request;
-            user = (User) service.loadUserByUsername(httpReq.getHeader("username"));
+            user = service.loadUserByUsername(httpReq.getHeader("username"));
             if (user != null && user.getPassword().equals(httpReq.getHeader("password"))){
                 SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(user));
             }

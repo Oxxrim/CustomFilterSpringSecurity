@@ -13,8 +13,8 @@ import java.security.Principal;
 public class SomeController {
 
     @GetMapping("/test")
-    public String username(@AuthenticationPrincipal User user) {
+    public String username(Principal principal) {
 
-        return user.toString();
+        return principal.getName();
     }
 }
