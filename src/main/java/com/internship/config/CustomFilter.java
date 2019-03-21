@@ -21,7 +21,7 @@ public class CustomFilter extends GenericFilterBean {
     @Autowired
     private UserService service;
 
-    private UserDetails user;
+    private User user;
 
     /*@PostConstruct
     public void init() {
@@ -34,7 +34,7 @@ public class CustomFilter extends GenericFilterBean {
 
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpReq = (HttpServletRequest) request;
-            user = service.loadUserByUsername(httpReq.getHeader("username"));
+            user = (User) service.loadUserByUsername(httpReq.getHeader("username"));
             if (user != null && user.getPassword().equals(httpReq.getHeader("password"))){
                 SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(user));
             }
