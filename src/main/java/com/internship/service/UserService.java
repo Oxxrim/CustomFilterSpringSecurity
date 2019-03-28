@@ -21,9 +21,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = db.stream().filter(usr -> usr.getUsername().equals(username))
-                .findFirst()
-                .get();
+        User user;
+        try {
+             user = db.stream().filter(usr -> usr.getUsername().equals(username))
+                    .findFirst()
+                    .get();
+        } catch (Exception e ) {
+            user = null;
+        }
 
         return  user;
     }

@@ -27,17 +27,17 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .anyRequest()
                 .authenticated()
-                .and()
+                /*.and()
                 .formLogin().loginPage("/login").permitAll()
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
                 .and()
-                .csrf().disable();
+                .csrf().disable()*/;
     }
 
 
-    @Override
+    /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(service);
-    }
+    }*/
 }

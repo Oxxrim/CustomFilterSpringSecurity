@@ -16,6 +16,7 @@ public class SomeController {
     @GetMapping("/test")
     public String username(@AuthenticationPrincipal User user) {
 
-        return user.getUsername() + user.getAuthorities();
+        return user.getUsername() + " " + user.getAuthorities();
     }
+
 }

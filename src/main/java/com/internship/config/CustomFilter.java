@@ -19,25 +19,19 @@ import java.io.IOException;
 public class CustomFilter extends GenericFilterBean {
 
     @Autowired
-    private UserService service;
+    private CustomAuthenticationManager manager;
 
-    private User user;
-
-    /*@PostConstruct
-    public void init() {
-        user = (User) service.loadUserByUsername("admin");
-    }*/
-
+    private User user = new User();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpReq = (HttpServletRequest) request;
-            user = (User) service.loadUserByUsername(httpReq.getHeader("username"));
-            if (user != null && user.getPassword().equals(httpReq.getHeader("password"))){
-                SecurityContextHolder.getContext().setAuthentication(new UserAuthentication(user));
-            }
+            user.setUsername(httpReq.getHeader("username"));
+            user.setPassword(httpReq.getHeader("password"));
+            SecurityContextHolder.getContext().setAuthentication(manager.authenticate(new UserAuthentication(user)));
+
         }
 
         chain.doFilter(request, response);
